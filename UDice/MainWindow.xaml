@@ -48,7 +48,15 @@
 					MouseLeftButtonDown="tossACoinCanvas_MouseLeftButtonDown"
 					MouseLeftButtonUp="tossACoinCanvas_MouseLeftButtonUp"
 					MouseMove="tossACoinCanvas_MouseMove">
-				
+				<Popup Name="popLink" StaysOpen="False" Placement="Mouse" MaxWidth="200" 
+ PopupAnimation="Fade"  AllowsTransparency="True">
+					<Border BorderBrush="Beige" BorderThickness="2" Background="White">
+						<TextBlock Margin="10" TextWrapping="Wrap"> 
+      For more information, see 
+      <Hyperlink NavigateUri="http://en.wikipedia.org/wiki/Term" >Wikipedia</Hyperlink>
+						</TextBlock>
+					</Border>
+				</Popup>
 			</Canvas>
 		</Grid>
 	</Grid>

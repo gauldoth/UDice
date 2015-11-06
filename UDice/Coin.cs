@@ -16,6 +16,7 @@ namespace UDice
 			Altitude = 0;
 			X = 0;
 			Y = 0;
+			Radius = 15;
 
 			ellipse = new Ellipse();
 			this.Content = ellipse;
@@ -41,11 +42,11 @@ namespace UDice
 
 		public void UpdateAppearance()
 		{
-			this.Width = 20.0 + 0.5 * Altitude;
-			this.Height = 20.0 + 0.5 * Altitude;
+			this.Width = Radius*2 + 0.5 * Altitude;
+			this.Height = Radius*2 + 0.5 * Altitude;
 
-			Canvas.SetLeft(this, X);
-			Canvas.SetTop(this, Y);
+			Canvas.SetLeft(this, X - this.Width/2);
+			Canvas.SetTop(this, Y- this.Height/2);
 		}
 
 		private Ellipse ellipse;

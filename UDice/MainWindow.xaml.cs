@@ -50,6 +50,13 @@ namespace UDice
 			return Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 		}
 
+		private double GetDistance(double x1, double y1, double x2, double y2)
+		{
+			double deltaX = x2 - x1;
+			double deltaY = y2 - y1;
+			return Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+		}
+
 		private double GetRadian(Point a, Point b)
 		{
 			double radius = GetDistance(a, b);
@@ -101,15 +108,20 @@ namespace UDice
 		Shape aura = new Ellipse();
 		private void tossACoinTimer_Elapsed(object sender, EventArgs e)
 		{
-			coin.Altitude += 1;
-			coin.X += 0.5;
-			coin.Y += 0.5;
-			coin.UpdateAppearance();
 
-			gatheredSpiritPower -= gatheredSpiritPower/100;
-			if (gatheredSpiritPower < 0)
+
+			if (tossing)
 			{
-				gatheredSpiritPower = 0;
+				//coin.Flip += flipVelocity;
+				coin.X += xVelocity;
+				coin.Y += yVelocity;
+				zVelocity += zAcceleration;
+				coin.Altitude += zVelocity;
+				if (coin.Altitude < 0)
+				{
+					coin.Altitude = 0;
+					tossing = false;
+				}
 			}
 
 			if (mouseLeftButtonDown)
@@ -169,11 +181,25 @@ namespace UDice
 			Canvas.SetLeft(aura, powerCenter.X - auraRadius / 2);
 			Canvas.SetTop(aura, powerCenter.Y - auraRadius / 2);
 
+
+			coin.UpdateAppearance();
+
+			gatheredSpiritPower -= gatheredSpiritPower / 100;
+			if (gatheredSpiritPower < 0)
+			{
+				gatheredSpiritPower = 0;
+			}
+
 		}
 
 		private Coin coin;
 		private Random rand = new Random();
 		private bool mouseLeftButtonDown = false;
+		private bool tossing = false;
+		private double xVelocity = 0;
+		private double yVelocity = 0;
+		private double zVelocity = 0;
+		private double zAcceleration = 0;
 		private void tossACoinCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			//开始计算按下时间.
@@ -186,6 +212,27 @@ namespace UDice
 		{
 			//计算路径.
 			mouseLeftButtonDown = false;
+
+			//计算是否有碰撞发生.
+			powerCenter = e.GetPosition(tossACoinCanvas);
+			double distanceFromCenter = GetDistance(coin.X,coin.Y,powerCenter.X,powerCenter.Y);
+			if (distanceFromCenter < coin.Radius && coin.Altitude == 0)
+			{
+				tossing = true;
+
+				//计算水平方向和速度.
+				xVelocity = (coin.X - powerCenter.X) * gatheredSpiritPower/500;
+				yVelocity = (coin.Y - powerCenter.Y) * gatheredSpiritPower/500;
+
+				//计算Z方向的加速度为重力.
+				zAcceleration = -0.8;
+
+				zVelocity = gatheredSpiritPower / 30;
+
+				gatheredSpiritPower = 0;
+			}
+
+			popLink.IsOpen = true;
 		}
 
 		private Point powerCenter;
