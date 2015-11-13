@@ -6,17 +6,24 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace UDice
 {
 	public class Coin : ContentControl
 	{
+		DropShadowEffect shadowEffect;
 		public Coin()
 		{
 			Altitude = 0;
 			X = 0;
 			Y = 0;
 			Radius = 15;
+
+			shadowEffect = new DropShadowEffect();
+			shadowEffect.BlurRadius = 5;
+			shadowEffect.ShadowDepth = Altitude+1;
+			this.Effect = shadowEffect;
 
 			ellipse = new Ellipse();
 			this.Content = ellipse;
@@ -44,6 +51,8 @@ namespace UDice
 		{
 			this.Width = Radius*2 + 0.5 * Altitude;
 			this.Height = Radius*2 + 0.5 * Altitude;
+
+			shadowEffect.ShadowDepth = Altitude+1;
 
 			Canvas.SetLeft(this, X - this.Width/2);
 			Canvas.SetTop(this, Y- this.Height/2);

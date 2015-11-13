@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Effects;
+using System.Media;
 
 namespace UDice
 {
@@ -72,6 +73,7 @@ namespace UDice
 			coin.X = tossACoinCanvas.ActualWidth / 2;
 			coin.Y = tossACoinCanvas.ActualHeight / 2;
 			tossACoinCanvas.Children.Add(coin);
+			Canvas.SetZIndex(coin, 1);
 
 			System.Windows.Threading.DispatcherTimer tossACoinTimer = 
 				new System.Windows.Threading.DispatcherTimer();
@@ -100,6 +102,7 @@ namespace UDice
 			effect.Radius = 5;
 			aura.Effect = effect;
 			tossACoinCanvas.Children.Add(aura);
+			Canvas.SetZIndex(aura, 0);
 		}
 
 		int maxSpirit = 0;
@@ -113,14 +116,26 @@ namespace UDice
 			if (tossing)
 			{
 				//coin.Flip += flipVelocity;
+
 				coin.X += xVelocity;
 				coin.Y += yVelocity;
+				if (coin.X < 0 || coin.X > tossACoinCanvas.ActualWidth)
+				{
+					xVelocity = -xVelocity;
+				}
+				if (coin.Y < 0 || coin.Y > tossACoinCanvas.ActualHeight)
+				{
+					yVelocity = -yVelocity;
+				}
 				zVelocity += zAcceleration;
 				coin.Altitude += zVelocity;
 				if (coin.Altitude < 0)
 				{
 					coin.Altitude = 0;
 					tossing = false;
+
+					SoundPlayer simpleSound = new SoundPlayer("Sound/coin2.wav");
+					simpleSound.Play();
 				}
 			}
 
@@ -218,21 +233,28 @@ namespace UDice
 			double distanceFromCenter = GetDistance(coin.X,coin.Y,powerCenter.X,powerCenter.Y);
 			if (distanceFromCenter < coin.Radius && coin.Altitude == 0)
 			{
+				zVelocity = gatheredSpiritPower / 30;
+
+				if (zVelocity < 2.0)
+				{
+					return;
+				}
+
+
 				tossing = true;
+
+				SoundPlayer simpleSound = new SoundPlayer("Sound/coin_flip.wav");
+				simpleSound.Play();
 
 				//计算水平方向和速度.
 				xVelocity = (coin.X - powerCenter.X) * gatheredSpiritPower/500;
 				yVelocity = (coin.Y - powerCenter.Y) * gatheredSpiritPower/500;
 
 				//计算Z方向的加速度为重力.
-				zAcceleration = -0.8;
-
-				zVelocity = gatheredSpiritPower / 30;
+				zAcceleration = -0.4;
 
 				gatheredSpiritPower = 0;
 			}
-
-			popLink.IsOpen = true;
 		}
 
 		private Point powerCenter;
