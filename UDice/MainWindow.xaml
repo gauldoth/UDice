@@ -35,7 +35,7 @@
 			</Grid>
 		</Grid>
 		<Grid Panel.ZIndex="1">
-			<Rectangle Fill="Lavender" Stroke="DarkBlue">
+			<Rectangle Fill="Transparent" Stroke="DarkBlue">
 				<Rectangle.Effect>
 					<BlurEffect Radius="5" >
 						
@@ -44,7 +44,7 @@
 			</Rectangle>
 		</Grid>
 		<Grid Panel.ZIndex="2" Name="tossACoinPanel">
-			<Canvas Name="tossACoinCanvas" Background="AliceBlue"
+			<Canvas Name="tossACoinCanvas" Background="Transparent"
 					MouseLeftButtonDown="tossACoinCanvas_MouseLeftButtonDown"
 					MouseLeftButtonUp="tossACoinCanvas_MouseLeftButtonUp"
 					MouseMove="tossACoinCanvas_MouseMove">
