@@ -128,10 +128,12 @@ namespace UDice
 					yVelocity = -yVelocity;
 				}
 				zVelocity += zAcceleration;
+				coin.Angle += angleVelocity;
 				coin.Altitude += zVelocity;
 				if (coin.Altitude < 0)
 				{
 					coin.Altitude = 0;
+					coin.Angle = 0;
 					tossing = false;
 
 					SoundPlayer simpleSound = new SoundPlayer("Sound/coin2.wav");
@@ -215,6 +217,7 @@ namespace UDice
 		private double yVelocity = 0;
 		private double zVelocity = 0;
 		private double zAcceleration = 0;
+		private double angleVelocity = 0;
 		private void tossACoinCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			//开始计算按下时间.
@@ -233,13 +236,16 @@ namespace UDice
 			double distanceFromCenter = GetDistance(coin.X,coin.Y,powerCenter.X,powerCenter.Y);
 			if (distanceFromCenter < coin.Radius && coin.Altitude == 0)
 			{
-				zVelocity = gatheredSpiritPower / 30;
+				zVelocity = gatheredSpiritPower / 20;
 
-				if (zVelocity < 2.0)
+				if (zVelocity < 1.5)
 				{
 					return;
 				}
 
+				coin.Angle2 = Math.Atan2(powerCenter.Y-coin.Y,powerCenter.X - coin.X);
+
+				angleVelocity = zVelocity/15;
 
 				tossing = true;
 

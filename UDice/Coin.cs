@@ -19,20 +19,41 @@ namespace UDice
 			X = 0;
 			Y = 0;
 			Radius = 15;
+			Angle = 0;
 
 			shadowEffect = new DropShadowEffect();
 			shadowEffect.BlurRadius = 5;
 			shadowEffect.ShadowDepth = Altitude+1;
-			this.Effect = shadowEffect;
+			//this.Effect = shadowEffect;
 
 			ellipse = new Ellipse();
-			this.Content = ellipse;
+			
+
+			ellipse2 = new Ellipse();
+
+			Grid grid = new Grid();
+			grid.Children.Add(ellipse);
+			grid.Children.Add(ellipse2);
+			this.Content = grid;
 
 			mainBrush = new SolidColorBrush(Colors.Silver);
-			borderBrush = new SolidColorBrush(Colors.Gray);
+			borderBrush = new SolidColorBrush(Colors.DarkGray);
+			backBrush = new SolidColorBrush(Colors.SlateGray);
 			ellipse.Fill = mainBrush;
 			ellipse.Stroke = borderBrush;
 			ellipse.Stretch = Stretch.Fill;
+			ellipse2.Fill = backBrush;
+			ellipse2.Stroke = borderBrush;
+			ellipse2.Stretch = Stretch.Fill;
+
+			TransformGroup transformGroup = new TransformGroup();
+			scaleTransform = new ScaleTransform();
+			transformGroup.Children.Add(scaleTransform);
+			rotateTransform = new RotateTransform();
+			transformGroup.Children.Add(rotateTransform);
+
+			ellipse.RenderTransform = transformGroup;
+			ellipse.RenderTransformOrigin = new Point(0.5, 0.5);
 
 			UpdateAppearance();
 		}
@@ -43,7 +64,11 @@ namespace UDice
 
 		public double Y { get; set; }
 
+		//与水平方向的夹角,弧度为单位.
 		public double Angle { get; set; }
+
+		//与X轴的夹角.
+		public double Angle2 { get; set; }
 
 		public double Radius { get; set; }
 
@@ -56,10 +81,17 @@ namespace UDice
 
 			Canvas.SetLeft(this, X - this.Width/2);
 			Canvas.SetTop(this, Y- this.Height/2);
+
+			scaleTransform.ScaleX = Math.Cos(Angle);
+			rotateTransform.Angle = Angle2 * 180 / Math.PI;
 		}
 
 		private Ellipse ellipse;
+		private Ellipse ellipse2;
 		private SolidColorBrush mainBrush;
+		private SolidColorBrush backBrush;
 		private SolidColorBrush borderBrush;
+		private RotateTransform rotateTransform;
+		private ScaleTransform scaleTransform;
 	}
 }

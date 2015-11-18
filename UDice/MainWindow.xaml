@@ -44,11 +44,10 @@
 			</Rectangle>
 		</Grid>
 		<Grid Panel.ZIndex="2" Name="tossACoinPanel">
-			<Canvas Name="tossACoinCanvas" Background="Transparent"
+			<Canvas Name="tossACoinCanvas" Background="White"
 					MouseLeftButtonDown="tossACoinCanvas_MouseLeftButtonDown"
 					MouseLeftButtonUp="tossACoinCanvas_MouseLeftButtonUp"
 					MouseMove="tossACoinCanvas_MouseMove">
-				
 			</Canvas>
 		</Grid>
 	</Grid>
