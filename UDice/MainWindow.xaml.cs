@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -159,7 +158,7 @@ namespace UDice
 				if (coin.Altitude < 0)
 				{
 					coin.Altitude = 0;
-					if (Math.Abs(zVelocity) < 2.5)
+					if (Math.Abs(zVelocity) < 1.5)
 					{
 						tossing = false;
 						double angleMod = coin.Angle %(Math.PI*2);
@@ -184,8 +183,8 @@ namespace UDice
 
 			if (bouncing)
 			{
-				zVelocity = -zVelocity*0.4;
-				angleVelocity = -angleVelocity * 0.8;
+				zVelocity = -zVelocity*0.5;
+				angleVelocity = -angleVelocity * 0.4;
 				bouncing = false;
 			}
 
