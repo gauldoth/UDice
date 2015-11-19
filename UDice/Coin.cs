@@ -22,9 +22,10 @@ namespace UDice
 			Angle = 0;
 
 			shadowEffect = new DropShadowEffect();
-			shadowEffect.BlurRadius = 5;
+            shadowEffect.BlurRadius = Altitude / 15;
 			shadowEffect.ShadowDepth = Altitude+1;
-			//this.Effect = shadowEffect;
+            shadowEffect.Opacity = 50 / (Altitude+50);
+			this.Effect = shadowEffect;
 
 			ellipse = new Ellipse();
 
@@ -121,7 +122,9 @@ namespace UDice
 			this.Width = Radius*2 + 0.5 * Altitude;
 			this.Height = Radius*2 + 0.5 * Altitude;
 
-			shadowEffect.ShadowDepth = Altitude+1;
+            shadowEffect.BlurRadius = Altitude/15;
+            shadowEffect.ShadowDepth = Altitude + 1;
+            shadowEffect.Opacity = 50 / (Altitude + 50);
 
 			Canvas.SetLeft(this, X - this.Width/2);
 			Canvas.SetTop(this, Y- this.Height/2);
