@@ -25,7 +25,7 @@ namespace UDice
 		{
 			InitializeComponent();
 
-
+			
 
 		}
 
@@ -75,6 +75,21 @@ namespace UDice
 			tossACoinCanvas.Children.Add(coin);
 			Canvas.SetZIndex(coin, 1);
 
+			//创建Blast Wave.
+			blastWave = new Ellipse();
+			blastWave.StrokeThickness = 0.2;
+			blastWave.Stroke = new SolidColorBrush(Colors.Red);
+			blastWave.Opacity = 0;
+			blastWave.Height = 5;
+			blastWave.Width = 5;
+			blastScale = new ScaleTransform();
+			blastScale.ScaleX = 1;
+			blastScale.ScaleY = 1;
+			blastWave.RenderTransform = blastScale;
+			blastWave.RenderTransformOrigin = new Point(0.5, 0.5);
+			tossACoinCanvas.Children.Add(blastWave);
+			Canvas.SetZIndex(blastWave, 0);
+
 			System.Windows.Threading.DispatcherTimer tossACoinTimer = 
 				new System.Windows.Threading.DispatcherTimer();
 			tossACoinTimer.Tick += new EventHandler(tossACoinTimer_Elapsed);
@@ -102,16 +117,27 @@ namespace UDice
 			effect.Radius = 5;
 			aura.Effect = effect;
 			tossACoinCanvas.Children.Add(aura);
-			Canvas.SetZIndex(aura, 0);
+			Canvas.SetZIndex(aura, -1);
 		}
 
 		int maxSpirit = 0;
 		double gatheredSpiritPower = 0;
 		List<Shape> spirits = new List<Shape>();
 		Shape aura = new Ellipse();
+		ScaleTransform blastScale;
 		private void tossACoinTimer_Elapsed(object sender, EventArgs e)
 		{
-
+			if (blastWave.Opacity >= 0)
+			{
+				blastWave.Opacity += blastWaveDecay;
+				blastScale.ScaleX += blastWaveVelocity;
+				blastScale.ScaleY += blastWaveVelocity;
+			}
+			else
+			{
+				blastScale.ScaleX = 1;
+				blastScale.ScaleY = 1;
+			}
 
 			if (tossing)
 			{
@@ -133,12 +159,34 @@ namespace UDice
 				if (coin.Altitude < 0)
 				{
 					coin.Altitude = 0;
-					coin.Angle = 0;
-					tossing = false;
+					if (Math.Abs(zVelocity) < 2.5)
+					{
+						tossing = false;
+						double angleMod = coin.Angle %(Math.PI*2);
+						if (angleMod > Math.PI / 2 && angleMod < Math.PI * 3 / 2)
+						{
+							coin.Angle = Math.PI;
+						}
+						else
+						{
+							coin.Angle = 0;
+						}
+					}
+					else
+					{
+						bouncing = true;
+					}
 
 					SoundPlayer simpleSound = new SoundPlayer("Sound/coin2.wav");
 					simpleSound.Play();
 				}
+			}
+
+			if (bouncing)
+			{
+				zVelocity = -zVelocity*0.4;
+				angleVelocity = -angleVelocity * 0.8;
+				bouncing = false;
 			}
 
 			if (mouseLeftButtonDown)
@@ -211,13 +259,17 @@ namespace UDice
 
 		private Coin coin;
 		private Random rand = new Random();
+		private Ellipse blastWave;
 		private bool mouseLeftButtonDown = false;
 		private bool tossing = false;
+		private bool bouncing = false;
 		private double xVelocity = 0;
 		private double yVelocity = 0;
 		private double zVelocity = 0;
 		private double zAcceleration = 0;
 		private double angleVelocity = 0;
+		private double blastWaveVelocity = 0;
+		private double blastWaveDecay = 0;
 		private void tossACoinCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 		{
 			//开始计算按下时间.
@@ -240,12 +292,20 @@ namespace UDice
 
 				if (zVelocity < 1.5)
 				{
-					return;
+					zVelocity = 1.5;
 				}
 
-				coin.Angle2 = Math.Atan2(powerCenter.Y-coin.Y,powerCenter.X - coin.X);
+				coin.Angle2 = Math.Atan2(powerCenter.Y - coin.Y, powerCenter.X - coin.X);
 
-				angleVelocity = zVelocity/15;
+				angleVelocity = zVelocity * distanceFromCenter / 50;
+
+				Canvas.SetLeft(blastWave, powerCenter.X - blastWave.Width / 2);
+				Canvas.SetTop(blastWave,powerCenter.Y-blastWave.Height/2);
+				blastWave.Opacity = 0.5;
+				blastWaveDecay = -5 / (gatheredSpiritPower+30);
+				blastWaveVelocity = gatheredSpiritPower/1000+2;
+				blastScale.ScaleX = 1;
+				blastScale.ScaleY = 1;
 
 				tossing = true;
 
