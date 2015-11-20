@@ -1,7 +1,7 @@
 ﻿<Window x:Class="UDice.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="340" Width="480" WindowStyle="None"
+        Title="MainWindow" Height="640" Width="960" WindowStyle="None"
 		Background="Transparent" AllowsTransparency="True"
 		Loaded="mainWindow_Loaded">
 	<Window.Resources>
