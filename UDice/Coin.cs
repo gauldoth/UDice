@@ -10,6 +10,7 @@ using System.Threading;
 
 namespace UDice
 {
+
 	public class Coin : ContentControl
 	{
 		DropShadowEffect shadowEffect;
@@ -24,6 +25,7 @@ namespace UDice
 			shadowEffect = new DropShadowEffect();
 			shadowEffect.BlurRadius = 5;
 			shadowEffect.ShadowDepth = Altitude+1;
+
 			//this.Effect = shadowEffect;
 
 			ellipse = new Ellipse();

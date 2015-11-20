@@ -50,5 +50,12 @@
 					MouseMove="tossACoinCanvas_MouseMove">
 			</Canvas>
 		</Grid>
+		<!--Grid Panel.ZIndex="3">
+			<Button Background="Transparent" VerticalAlignment="Bottom"  Width ="80" Height="40" Opacity="0.8" FontSize="24"  Foreground="White">Install
+				<Button.Effect>
+					<DropShadowEffect Color="Purple" ShadowDepth="0" BlurRadius="25" Opacity="1"/>
+				</Button.Effect>
+			</Button>
+		</Grid-->
 	</Grid>
 </Window>
